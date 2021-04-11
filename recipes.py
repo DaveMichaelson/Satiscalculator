@@ -38,13 +38,13 @@ def parse_recipe(line):
         if token == "":
             pos += 1
             continue
-        elif token in [",", "-"]:
+        elif token[-1] in [",", "-"]:
             pos += len(token) + 1
-            current_dir[name[1:]] = number
+            current_dir[name[1:] + token[:-1]] = number
             name = ""
             number = None
 
-            if token == ",":
+            if token[-1] == ",":
                 state = ParseState.NUMBER
             else:
                 state = ParseState.TIME
