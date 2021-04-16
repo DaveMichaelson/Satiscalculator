@@ -1,25 +1,25 @@
 import recipes
 import production
+import argparse
 
-if __name__ == "__main__":
+def _read_recipes_from_file(file):
     rec_list = []
 
-    with open("recipe/satisfactory.recipes") as f:
+    with open(file) as f:
         for line in f.readlines():
             if line != "\n":
                 rec_list.append(recipes.parse_recipe(line))
 
-    for r in rec_list:
-        print(r)
+    return rec_list
 
-    # print("\n---------Graph---------")
-    # prod_tree = production.ProductionTree("Beton", rec_list)
-    # print(prod_tree)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("recipes", type=_read_recipes_from_file)
+    parser.add_argument("product")
+    parser.add_argument("-f", "--frequency", dest='frequency', type=float)
+    args = parser.parse_args()
 
-    # print("\n---------Graph---------")
-    # prod_tree = production.ProductionTree("Kabel", rec_list)
-    # print(prod_tree)
-
-    print("\n---------Graph---------")
-    prod_tree = production.ProductionTree("Rotor", rec_list)
+    prod_tree = production.ProductionTree(args.product, args.recipes)
+    if args.frequency:
+        prod_tree.update_end_product_frequency(args.frequency)
     print(prod_tree)
